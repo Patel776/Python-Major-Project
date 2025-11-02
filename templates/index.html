@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Today in History | Histo</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      color: #fff;
+      padding-top: 80px;
+      overflow-x: hidden;
+    }
+
+    /* Header */
+    header.site-header {
+      position: fixed;
+      top:0; left:0; width:100%;
+      display:flex; justify-content:space-between; align-items:center;
+      padding:10px 20px;
+      backdrop-filter: blur(12px);
+      background: rgba(0,0,0,0.35);
+      border-bottom:1px solid rgba(255,255,255,0.1);
+      z-index:1000;
+      box-shadow:0 4px 15px rgba(0,0,0,0.4);
+    }
+
+    .logo {
+      font-family: 'Pacifico', cursive;
+      font-size:2em;
+      color: #00f2ff;
+      text-shadow: 0 0 6px rgba(0,242,255,0.6);
+    }
+
+    .top-nav {
+      display:flex; gap:18px;
+    }
+
+    .top-nav a {
+      color:#ffff00;
+      text-decoration:none;
+      font-weight:500;
+      padding:8px 16px;
+      border-radius:12px;
+      background: rgba(0,0,0,0.5);
+      border:1.5px solid #a855f7;
+      transition: all 0.3s ease;
+      box-shadow:0 0 8px rgba(168,85,247,0.15);
+    }
+
+    .top-nav a:hover {
+      background:#00f2ff;
+      color:#000;
+      box-shadow: 0 0 15px rgba(0,242,255,0.7);
+    }
+
+    .menu-toggle { display:none; font-size:24px; color:#ffff00; cursor:pointer; }
+
+    @media(max-width:768px){
+      .menu-toggle { display:block; }
+      .top-nav { 
+        display:none; flex-direction:column; 
+        background: rgba(0,0,0,0.9); 
+        position:absolute; top:60px; right:20px; 
+        padding:14px; border-radius:16px; border:1.5px solid rgba(168,85,247,0.3);
+      }
+      .top-nav.active { display:flex; }
+    }
+
+    .section { max-width:960px; margin:0 auto; padding:30px 20px; }
+    .card {
+      background: rgba(255,255,255,0.05);
+      border:1px solid rgba(255,255,255,0.08);
+      backdrop-filter: blur(8px);
+      border-radius:16px;
+      padding:24px;
+      margin-bottom:20px;
+      box-shadow: 0 0 20px rgba(0,242,255,0.15);
+      min-height:140px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.5s ease;
+      cursor:pointer;
+    }
+    .card:hover { transform: translateY(-5px); box-shadow: 0 12px 30px rgba(0,242,255,0.4); }
+
+    .card h2 { 
+      font-size:1.4em; color:#00f2ff; display:flex; align-items:center; gap:12px; margin-bottom:12px;
+      text-shadow:0 0 8px rgba(0,242,255,0.5);
+    }
+    .card p { font-size:1em; line-height:1.6; color:#e0e0e0; }
+
+    .api-usage h3 { font-size:1.5em; color:#ffff00; margin-bottom:20px; text-shadow:0 0 6px rgba(255,255,0,0.4);}
+    .api-usage p { font-size:1em; margin-bottom:10px; color:#ccc; }
+    .api-usage code { background:#111; padding:4px 8px; border-radius:6px; color:#0ff; font-family:monospace; }
+    .try-button { margin-top:18px; padding:12px 22px; background:#00f2ff; color:#000; font-weight:bold; border:none; border-radius:10px; cursor:pointer; transition:0.3s; }
+    .try-button:hover { background:#0ff; }
+
+    footer.site-footer {
+      text-align:center; color:#00f2ff;
+      padding:20px 0;
+      border-top:1px solid rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="site-header">
+    <div class="logo">Histo</div>
+    <div style="display:flex;align-items:center;gap:24px;">
+      <nav class="top-nav" id="navMenu">
+        <a href="https://github.com/pyKinsu" target="_blank"><i class="fab fa-github"></i> Follow Me</a>
+        <a href="https://github.com/pyKinsu/historicaldates/stargazers" target="_blank"><i class="fas fa-star"></i> Give Star</a>
+        <a href="https://github.com/pyKinsu/historicaldates/fork" target="_blank"><i class="fas fa-code-branch"></i> Fork Repo</a>
+        <a href="/pages/Contact"><i class="fas fa-paper-plane"></i> Contact</a>
+      </nav>
+      <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
+    </div>
+  </header>
+
+  <!-- Content -->
+  <div class="section">
+    <div class="card" id="eventCard">
+      <h2><i class="fas fa-calendar-day"></i> Event</h2>
+      <p>Loading...</p>
+    </div>
+    <div class="card" id="birthCard">
+      <h2><i class="fas fa-baby"></i> Birth</h2>
+      <p>Loading...</p>
+    </div>
+    <div class="card" id="deathCard">
+      <h2><i class="fas fa-skull-crossbones"></i> Death</h2>
+      <p>Loading...</p>
+    </div>
+
+    <div class="api-usage">
+      <h3>🚀 How to Use the Historical Dates API</h3>
+      <p>➤ To get today’s data: <code>/date</code></p>
+      <p>➤ For a specific date: <code>/date/month/day</code></p>
+      <p>➤ Example: <code>/date/7/10</code> → July 10</p>
+      <p>📦 Each response includes <strong>Events</strong>, <strong>Births</strong>, and <strong>Deaths</strong>.</p>
+      <p>🔍 All data is in JSON format and updated live.</p>
+      <button class="try-button" onclick="window.location.href='/demo.html'">▶️ Try It Now</button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    © 2025 Histo by Kinsu
+  </footer>
+
+  <!-- Script -->
+  <script>
+    document.getElementById('menuToggle').addEventListener('click', () => {
+      document.getElementById('navMenu').classList.toggle('active');
+    });
+
+    async function loadTodayHistory() {
+      try {
+        const res = await fetch('/date');
+        const data = await res.json();
+        const events = data.data.Events;
+        const births = data.data.Births;
+        const deaths = data.data.Deaths;
+
+        let eventIndex=0, birthIndex=0, deathIndex=0;
+
+        function updateCard(id,list,index){
+          document.getElementById(id).querySelector("p").innerText=list[index].text;
+        }
+
+        updateCard('eventCard',events,eventIndex);
+        updateCard('birthCard',births,birthIndex);
+        updateCard('deathCard',deaths,deathIndex);
+
+        setInterval(()=>{ eventIndex=(eventIndex+1)%events.length; updateCard('eventCard',events,eventIndex); },4000);
+        setInterval(()=>{ birthIndex=(birthIndex+1)%births.length; updateCard('birthCard',births,birthIndex); },5000);
+        setInterval(()=>{ deathIndex=(deathIndex+1)%deaths.length; updateCard('deathCard',deaths,deathIndex); },6000);
+
+      } catch(e){
+        document.querySelectorAll('.card p').forEach(p=>p.innerText="Error loading data.");
+        console.error("API error",e);
+      }
+    }
+
+    loadTodayHistory();
+  </script>
+</body>
+</html>
